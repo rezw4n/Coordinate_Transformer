@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="shortcut icon" href="static/favicon7ec9.ico?t=1708955069" />
+  <link rel="search" href="static/opensearch7ec9.xml?t=1708955069" title="EPSG.io"
+    type="application/opensearchdescription+xml" />
+
+  <link href="static/css/base.min7ec9.css?t=1708955069" rel="stylesheet" />
+  <script src="static/js/clipboard.min7ec9.js?t=1708955069"></script>
+  <script src="static/js/index7ec9.js?t=1708955069"></script>
+
+  <title>
+    NSDI Coordinates Transformer
+  </title>
+
+  <script src="static/js/transform7ec9.js?t=1708955069"></script>
+
+</head>
+
+
+<body id="transform">
+  <div class="row center-mobile">
+    <div class="container">
+      <div class="col10">
+        <h1><b>NSDI Coordinates Transformer</b></h1>
+        <h3>NSDI converter for lat &amp; long coordinates, geodetic datums and projected systems</h3>
+      </div>
+
+      <div class="col5">
+        <h4 class="borderbottom-gray-light padb-1">Input coordinate system</h4>
+        <span id="srs-in-name">Not selected</span> &nbsp;
+        <a href="#" n id="srs-in-change" class="btn-small  pad-1 pady-0">Change</a>
+        <br>
+        <br><br>
+
+        <h4 class="borderbottom-gray-light padb-1">Input coordinates <a href="#" style="display: none;">Batch</a></h4>
+        <form id="srs-in-form">
+
+          <label for="srs-in-x" data-value="X:" data-value-degrees="Longitude:">X:</label>
+          <input class="transform" type="text" id="srs-in-x" data-placeholder="Decimal value of X coordinate"
+            data-placeholder-degrees="e.g. 8°33'10&quot;, 8.55, 8 33 10" />
+          <br>
+          <label for="srs-in-y" data-value="Y:" data-value-degrees="Latitude:">Y:</label>
+          <input class="transform" type="text" id="srs-in-y" data-placeholder="Decimal value of Y coordinate"
+            data-placeholder-degrees="e.g. 47°22'00&quot;, 47.36666, 47 22 00" />
+          <input type="button" id="srs-in-format" class="btn-swap small pady-0 padx-1" style="display:none;"
+            value="Format: D°M'S&quot;" />
+
+          <textarea name="batch-in" style="display: none;"></textarea>
+          <br />
+          <a id="srs-in-map-link" href="#" style="display:none;"></a>
+          <br>
+
+          <span id="transformer-name">Using best available transformer</span> &nbsp;
+          <a href="#" id="transformer-change" class="btn-small pad-1 pady-0">Change</a>
+
+          <br>
+          <br>
+          <div id="srs-in-details" style="display:none;">
+            <span class="caption">Unit: </span><span id="srs-in-unit"></span><br />
+            <span class="caption">Area of use: </span><span id="srs-in-area"></span><br />
+            <span class="caption" style="display: none;">Accuracy: </span><span id="srs-in-accuracy" style="display: none;"></span>
+          </div>
+
+          <a id="srs-in-details-link" href="#" target="_blank"></a><br /><br />
+      </div>
+      <div class="col1 center pady-10 pad-mobile">
+
+        <input type="submit" value="Transform" class="btn mary-3 padx-2 marb-0 mar-mobile" />
+        <br>
+        <br>
+        <input type="button" id="srs-swap" value="Swap &#x21C4;" class="btn-swap" />
+
+      </div>
+      <div class="col5 offset1">
+        <h4 class="borderbottom-gray-light padb-1">Output coordinate system</h4>
+        <span id="srs-out-name">Not selected</span> &nbsp;
+        <a href="#" n id="srs-out-change" class="btn-small pad-1 pady-0">Change</a>
+        <br>
+        <br>
+
+        <br>
+        <h4 class="borderbottom-gray-light padb-1">Output coordinates</h4>
+
+        <label for="srs-out-x" data-value="X:" data-value-degrees="Longitude:">X:</label>
+        <input class="transform" type="text" id="srs-out-x" data-placeholder="" data-placeholder-degrees=""
+          readonly="readonly" />
+        <br />
+        <label for="srs-out-y" data-value="Y:" data-value-degrees="Latitude:">Y:</label>
+        <input class="transform" type="text" id="srs-out-y" data-placeholder="" data-placeholder-degrees=""
+          readonly="readonly" />
+        <input type="button" id="srs-out-format" class="btn-swap pady-0 padx-1 small" style="display:none;"
+          value="Format: D°M'S&quot;" />
+
+        <textarea name="batch-out" style="display: none;"></textarea>
+        <br>
+        <a id="srs-out-map-link" href="#" style="display:none; !important"></a>
+
+        </form>
+
+        <br>
+        <br>
+        <div id="srs-out-details" style="display:none;">
+          <span class="caption">Unit: </span><span id="srs-out-unit"></span><br />
+          <span class="caption">Area of use: </span><span id="srs-out-area"></span><br />
+          <span class="caption" style="display: none;">Accuracy: </span><span id="srs-out-accuracy" style="display: none;"></span>
+        </div>
+        <a id="srs-out-details-link" href="#" target="_blank"></a> <br>
+
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <script type="text/javascript">
+    new TransformPage("https://epsg.io/srs/transform/{coordinates}.json?key=default", "https://epsg.io/srs/search/{query}.json?key=default");
+  </script>
+
+  <script>
+    /* XXX: Navbar-top */
+    var navMobileBtn = document.querySelector('#nav-mobile-btn');
+    if (navMobileBtn) {
+      navMobileBtn.onclick = function () {
+        var navMobileNav = document.getElementById('nav-mobile-nav');
+        var navMobileBtn = document.getElementById('nav-mobile-btn');
+        if (navMobileNav.className === 'active') {
+          navMobileNav.className = '';
+          navMobileBtn.className = '';
+        } else {
+          navMobileNav.className = 'active';
+          navMobileBtn.className = 'active';
+        }
+      };
+    }
+  </script>
+
+</body>
+
+</html>
