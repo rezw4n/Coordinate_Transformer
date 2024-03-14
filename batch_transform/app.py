@@ -3,6 +3,7 @@ import pandas as pd
 from pyproj import Transformer, CRS
 from pyproj.database import query_crs_info
 
+st.set_page_config(page_title="NSDI Coordinate Transformer", page_icon="🌍")
 
 
 def load_data(file):
@@ -31,7 +32,6 @@ def transform_coordinates(df, x_col, y_col, in_crs, out_crs):
         st.error(f"Error in transforming coordinates: {e}")
         return df
 
-
 def get_crs_list():
     crs_list = query_crs_info()
     return [f"{crs.auth_name}:{crs.code} - {crs.name}" for crs in crs_list]
@@ -46,18 +46,29 @@ def main():
             st.write("Input Data:")
             st.dataframe(data)
 
-            x_column = st.selectbox("Select X coordinate column", data.columns)
-            y_column = st.selectbox("Select Y coordinate column", data.columns)
+            st.subheader("Select the Latitude and Longitude Columns")
+            col1, col2 = st.columns(2)
+
+            with col1:
+                x_column = st.selectbox("Select X coordinate column", data.columns)
+            
+            with col2:
+                y_column = st.selectbox("Select Y coordinate column", data.columns)
 
             crs_options = get_crs_list()
+            
+            st.subheader("Select the Input and Output Coordinate System")
+            col3, col4 = st.columns(2)
 
-            input_crs = st.selectbox("Select Input Coordinate System", options=crs_options)
-            output_crs = st.selectbox("Select Output Coordinate System", options=crs_options)
+            with col3:
+                input_crs = st.selectbox("Select Input Coordinate System", options=crs_options)
+            
+            with col4:
+                output_crs = st.selectbox("Select Output Coordinate System", options=crs_options)
 
             if st.button('Transform'):
                 result = transform_coordinates(data, x_column, y_column, input_crs, output_crs)
                 st.write("Transformed Data:")
                 st.write(result)
-
 if __name__ == "__main__":
     main()
