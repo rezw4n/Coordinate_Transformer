@@ -25,7 +25,7 @@ def transform_coordinates(df, x_col, y_col, in_crs, out_crs):
         x_coords, y_coords = df[x_col].values, df[y_col].values
         transformed_coords = transformer.transform(x_coords, y_coords)
 
-        df['c_longitude'], df['c_latitude'] = zip(*[(lon, lat) for lon, lat in zip(*transformed_coords)])
+        df['transformed_longitude'], df['transformed_latitude'] = zip(*[(lon, lat) for lon, lat in zip(*transformed_coords)])
 
         return df
     except Exception as e:
@@ -44,16 +44,16 @@ def main():
         data = load_data(uploaded_file)
         if data is not None:
             st.write("Input Data:")
-            st.dataframe(data)
+            st.dataframe(data, width=1000)
 
             st.subheader("Select the Latitude and Longitude Columns")
             col1, col2 = st.columns(2)
 
             with col1:
-                x_column = st.selectbox("Select X coordinate column", data.columns)
+                x_column = st.selectbox("Select X (Longitude) coordinate column", data.columns)
             
             with col2:
-                y_column = st.selectbox("Select Y coordinate column", data.columns)
+                y_column = st.selectbox("Select Y (Latitude) coordinate column", data.columns)
 
             crs_options = get_crs_list()
             
@@ -70,5 +70,7 @@ def main():
                 result = transform_coordinates(data, x_column, y_column, input_crs, output_crs)
                 st.write("Transformed Data:")
                 st.write(result)
+
+
 if __name__ == "__main__":
     main()
