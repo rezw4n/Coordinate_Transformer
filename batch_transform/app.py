@@ -44,7 +44,7 @@ def main():
         data = load_data(uploaded_file)
         if data is not None:
             st.write("Input Data:")
-            st.dataframe(data, width=1000)
+            st.dataframe(data, use_container_width =True)
 
             st.subheader("Select the Latitude and Longitude Columns")
             col1, col2 = st.columns(2)
